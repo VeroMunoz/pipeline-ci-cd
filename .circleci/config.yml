@@ -16,6 +16,13 @@ jobs:
     steps: 
       - checkout
       - run: python3 main-test.py
+  build-on-production: 
+    working_directory: ~/circleci-python
+    docker: 
+      - image: "circleci/python:3.6.4"
+    steps: 
+      - checkout
+      - run: python3 main.py
 
 
 workflows: 
@@ -25,6 +32,8 @@ workflows:
       - test: 
           requires:
             - build
+      - build-on-production:
+          requires:
             - approval
 
 # # Use a package of configuration called an orb.
