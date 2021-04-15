@@ -16,8 +16,6 @@ jobs:
     steps: 
       - checkout
       - run: python3 main-test.py
-  approval: 
-    type: approval
   build-on-production: 
     working_directory: ~/circleci-python
     docker: 
@@ -34,7 +32,9 @@ workflows:
       - test: 
           requires:
             - build
-      - approval
+      - hold: 
+          type: approval
+          requires: test
       - build-on-production:
           requires:
             - approval
