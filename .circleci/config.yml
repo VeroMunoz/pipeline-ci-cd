@@ -25,6 +25,7 @@ workflows:
       - test: 
           requires:
             - build
+            - approval
 
 # # Use a package of configuration called an orb.
 # orbs:
