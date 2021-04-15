@@ -24,7 +24,6 @@ jobs:
       - checkout
       - run: python3 main.py
 
-
 workflows: 
   build_and_test: 
     jobs: 
