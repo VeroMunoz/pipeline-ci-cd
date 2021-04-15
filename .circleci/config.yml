@@ -34,10 +34,11 @@ workflows:
             - build
       - hold: 
           type: approval
-          requires: test
+          requires: 
+           - test
       - build-on-production:
           requires:
-            - approval
+            - hold
 
 # # Use a package of configuration called an orb.
 # orbs:
