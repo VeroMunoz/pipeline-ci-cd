@@ -13,7 +13,7 @@ jobs:
             echo $other_id  
             for other_id in $other_id
               do
-                workflow_id=$(curl -s --request GET "https://circleci.com/api/v2/pipeline/${other_id}/workflow" | jq -r --arg CIRCLE_WORKFLOW_ID "$CIRCLE_WORKFLOW_ID" --arg WF_NAME "${WF_NAME}" '.items[]|select(.status == "on_hold" or .status == "running")|select(.name == $WF_NAME)|select(.id != $CIRCLE_WORKFLOW_ID)|.id')
+                workflow_id=$(curl -s -X GET "https://circleci.com/api/v2/pipeline/${other_id}/workflow" | jq -r '.items[]|select(.status == "on_hold").id')
                 echo $workflow_id
               done  
   build: 
