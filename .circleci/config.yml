@@ -12,6 +12,7 @@ jobs:
               other_id=$(curl -s -H 'Accept: application/json' -X GET 'https://circleci.com/api/v2/pipeline/<< pipeline.id >>/workflow')
               echo $other_id         
               echo $CIRCLE_WORKFLOW_ID
+              echo hola
   build: 
     working_directory: ~/circleci-python
     docker: 
