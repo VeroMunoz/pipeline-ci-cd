@@ -2,6 +2,16 @@
 version: 2.1
 # Jobs: Are collections of steps. 
 jobs: 
+  cancel-other-hold:
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - run:
+          name: Cancelling the other on_hold workflow
+          command: |
+              other_on_hold_id=$(curl -G "https://circleci.com/api/v2/pipeline/<<pipeline.id>>/workflow" -H "Circle-Token: $TOKEN"|jq -rs --arg CIRCLE_WORKFLOW_ID "$CIRCLE_WORKFLOW_ID" '.[].items[]|select(.status == "on_hold")|select(.id != $CIRCLE_WORKFLOW_ID)|.id')
+                    echo $other_on_hold_id
+                    curl -X POST "https://circleci.com/api/v2/workflow/${other_on_hold_id}/cancel" -H "Circle-Token: ${TOKEN}"
   build: 
     working_directory: ~/circleci-python
     docker: 
@@ -31,6 +41,7 @@ jobs:
 workflows: 
   build_and_test: 
     jobs: 
+      - cancel-other-hold
       - build
       - test: 
           requires:
