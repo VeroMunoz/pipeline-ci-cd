@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Cancelling the other on_hold workflow
           command: |
-              other_on_hold_id=$(curl -s -H 'Accept: application/json' -X GET https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/job?circle-token=${TOKEN)
+              other_on_hold_id=$(curl -s -H 'Accept: application/json' -X GET https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/job?circle-token=${TOKEN}
               echo $other_on_hold_id
                     
   build: 
