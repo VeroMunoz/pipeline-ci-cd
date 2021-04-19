@@ -10,7 +10,8 @@ jobs:
           name: Cancelling the other on_hold workflow
           command: |
               other_on_hold_id=$(curl -s -H 'Accept: application/json' -X GET https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}?circle-token=${TOKEN})
-              echo $other_on_hold_id                   
+              echo $other_on_hold_id         
+              echo $CIRCLE_WORKFLOW_ID
   build: 
     working_directory: ~/circleci-python
     docker: 
@@ -20,7 +21,7 @@ jobs:
     steps: 
       - checkout
       - run: python3 main.py
-      - run: echo $TOKEN
+      - run: echo $CIRCLE_COMPARE_URL
     
   test:
     working_directory: ~/circleci-python
