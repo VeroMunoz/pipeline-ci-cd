@@ -6,10 +6,13 @@ jobs:
     working_directory: ~/circleci-python
     docker: 
       - image: "circleci/python:3.6.4"
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps: 
       - checkout
       - run: python3 main.py
-      - run: echo $CIRCLE_NODE_INDEX
+      - run: echo $CIRCLE_COMPARE_URL
+    
   test:
     working_directory: ~/circleci-python
     docker: 
