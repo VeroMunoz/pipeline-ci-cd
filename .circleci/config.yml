@@ -10,7 +10,9 @@ jobs:
           name: Cancelling the other on_hold workflow
           command: |
               other_id=$(curl -s -H 'Accept: application/json' -X GET 'https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${TOKEN}')
-              echo $other_id         
+              PIPE_IDS=$(curl --header "Circle-Token: $TOKEN" --request GET "https://circleci.com/api/v2/project/gh/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pipeline?branch=$CIRCLE_BRANCH"|jq -r --arg CIRCLE_USERNAME "$CIRCLE_USERNAME" '.items[]|select(.state == "created")|select(.trigger.actor.login == $CIRCLE_USERNAME).id')
+              echo $other_id
+              echo $PIPE_IDS         
               echo $CIRCLE_PROJECT_USERNAME
               echo $CIRCLE_PROJECT_REPONAME
   build: 
