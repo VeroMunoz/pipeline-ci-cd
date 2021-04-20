@@ -26,7 +26,7 @@ jobs:
     steps: 
       - checkout
       - run: python3 main.py
-    cancel-other-hold:
+  cancel-other-hold:
     docker:
       - image: "circleci/python:3.6.4"
     steps:
