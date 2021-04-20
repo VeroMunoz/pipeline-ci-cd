@@ -2,20 +2,6 @@
 version: 2.1
 # Jobs: Are collections of steps. 
 jobs: 
-  cancel-other-hold:
-    docker:
-      - image: "circleci/python:3.6.4"
-    steps:
-      - run:
-          name: Cancelling the other on_hold workflow
-          command: |
-            other_id=$(curl -s -X GET 'https://circleci.com/api/v2/project/gh/VeroMunoz/pipeline-ci-cd/pipeline?circle-token=${TOKEN}' | jq -r --arg CIRCLE_USERNAME "$CIRCLE_USERNAME" '.items[]|select(.state == "created").id')
-            echo $other_id  
-            for other_id in $other_id
-              do
-                workflow_id=$(curl -s -X GET "https://circleci.com/api/v2/pipeline/${other_id}/workflow" | jq -r '.items[]|select(.status == "on_hold").id')
-                curl -s --header "Circle-Token: $PERSONAL_TOKEN" -X POST https://circleci.com/api/v2/workflow/${workflow_id}/cancel
-              done  
   build: 
     working_directory: ~/circleci-python
     docker: 
@@ -26,7 +12,6 @@ jobs:
       - checkout
       - run: python3 main.py
       - run: echo $CIRCLE_COMPARE_URL
-    
   test:
     working_directory: ~/circleci-python
     docker: 
@@ -41,11 +26,24 @@ jobs:
     steps: 
       - checkout
       - run: python3 main.py
+    cancel-other-hold:
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - run:
+          name: Cancelling the other on_hold workflow
+          command: |
+            other_id=$(curl -s -X GET 'https://circleci.com/api/v2/project/gh/VeroMunoz/pipeline-ci-cd/pipeline?circle-token=${TOKEN}' | jq -r --arg CIRCLE_USERNAME "$CIRCLE_USERNAME" '.items[]|select(.state == "created").id')
+            echo $other_id  
+            for other_id in $other_id
+              do
+                workflow_id=$(curl -s -X GET "https://circleci.com/api/v2/pipeline/${other_id}/workflow" | jq -r '.items[]|select(.status == "on_hold").id')
+                curl -s --header "Circle-Token: $PERSONAL_TOKEN" -X POST https://circleci.com/api/v2/workflow/${workflow_id}/cancel
+              done  
 
 workflows: 
   build_and_test: 
     jobs: 
-      - cancel-other-hold
       - build
       - test: 
           requires:
@@ -57,15 +55,6 @@ workflows:
       - build-on-production:
           requires:
             - hold
-
-# # Use a package of configuration called an orb.
-# orbs:
-#   # Declare a dependency on the welcome-orb
-#   welcome: circleci/welcome-orb@0.4.1
-# # Orchestrate or schedule a set of jobs
-# workflows:
-#   # Name the workflow "welcome"
-#   welcome:
-#     # Run the welcome/run job in its own container
-#     jobs:
-#       - welcome/run
+      - cancel-other-hold:
+          requires:
+            - build-on-production
