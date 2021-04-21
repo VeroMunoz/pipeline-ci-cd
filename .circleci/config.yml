@@ -36,7 +36,7 @@ jobs:
               workflow_id=$(curl -s -X GET "https://circleci.com/api/v2/pipeline/${pipeline_id}/workflow" | jq -r '.items[]|select(.status == "on_hold").id')
               echo $workflow_id
               if [ ! -z "$workflow_id" ]; then
-                  curl -s --header "Circle-Token: $PERSONAL_TOKEN" -X POST https://circleci.com/api/v2/workflow/${workflow_id}/cancel
+                  curl -s  -X POST https://circleci.com/api/v2/workflow/${workflow_id}/cancel
               fi
               done 
 workflows: 
