@@ -27,7 +27,7 @@ jobs:
       - image: "circleci/python:3.6.4"
     steps:
       - run:
-          name: Cancelling the other on_hold workflow
+          name: Auto cancel redundants builds
           command: |
             pipeline_id=$(curl -s -X GET 'https://circleci.com/api/v2/project/gh/VeroMunoz/pipeline-ci-cd/pipeline' | jq -r --arg CIRCLE_USERNAME "$CIRCLE_USERNAME" '.items[]|select(.state == "created").id')
             echo $pipeline_id  
