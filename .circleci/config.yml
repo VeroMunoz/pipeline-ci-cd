@@ -22,7 +22,7 @@ jobs:
     steps: 
       - checkout
       - run: python3 main.py
-  cancel-other-hold:
+  auto-cancel-redundant-builds:
     docker:
       - image: "circleci/python:3.6.4"
     steps:
@@ -53,6 +53,6 @@ workflows:
       - build-on-production:
           requires:
             - hold
-      - cancel-other-hold:
+      - auto-cancel-redundant-builds:
           requires:
             - build-on-production
