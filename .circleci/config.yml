@@ -49,12 +49,12 @@ workflows:
       - hold: 
           type: approval
           requires: 
-           - build
+           - test
       - build-on-production:
           requires:
             - hold
       - auto-cancel-redundant-builds:
           requires:
-            - hold
+            - build-on-production
 
 
