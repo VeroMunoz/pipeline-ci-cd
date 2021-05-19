@@ -56,5 +56,3 @@ workflows:
       - auto-cancel-redundant-builds:
           requires:
             - build-on-production
-
-
