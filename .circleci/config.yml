@@ -43,18 +43,16 @@ workflows:
   build_and_test: 
     jobs: 
       - build
-      - test: 
-          requires:
-            - build
+      # - test: 
+      #     requires:
+      #       - build
       - hold: 
           type: approval
           requires: 
-           - test
-      - build-on-production:
-          requires:
-            - hold
+           - build
+      # - build-on-production:
+      #     requires:
+      #       - hold
       - auto-cancel-redundant-builds:
           requires:
-            - build-on-production
-
-
+            - hold
