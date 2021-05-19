@@ -29,10 +29,10 @@ jobs:
       - run:
           name: Auto cancel redundants builds
           command: |
-            pipeline_id=$(curl -s -X GET 'https://circleci.com/api/v2/project/gh/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME' | jq -r --arg CIRCLE_USERNAME "$CIRCLE_USERNAME" '.items[]|select(.state == "created").id')
+            pipeline_id=$(curl -s -X GET "https://circleci.com/api/v2/project/gh/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pipeline" | jq -r --arg CIRCLE_USERNAME "$CIRCLE_USERNAME" '.items[]|select(.state == "created").id')
             echo $pipeline_id  
             for pipeline_id in $pipeline_id
-            do
+              do
               workflow_id=$(curl -s -X GET "https://circleci.com/api/v2/pipeline/${pipeline_id}/workflow" | jq -r '.items[]|select(.status == "on_hold").id')
               echo $workflow_id
               if [ ! -z "$workflow_id" ]; then
